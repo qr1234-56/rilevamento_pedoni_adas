@@ -1,0 +1,1 @@
+In questa cartella gli script di valutazione salvano i risultati.

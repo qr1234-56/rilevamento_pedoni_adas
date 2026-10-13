@@ -1,0 +1,44 @@
+ESEMPI
+
+Immagini prodotte dal sistema, per vederne il funzionamento senza doverlo
+eseguire. Provengono da una ripresa effettuata con telecamera installata
+su un veicolo in movimento (fonte: Pexels, 30 secondi, 1280x720),
+analizzata con YOLOv8n e soglia di confidenza 0,25.
+
+Il livello di allerta nasce da tre criteri combinati: la distanza stimata
+(rosso entro 10 m, giallo entro 25 m), il tempo residuo al contatto
+(rosso sotto 2 s, giallo sotto 4 s) e la posizione rispetto alla
+traiettoria del veicolo. Chi si trova fuori dal corridoio di marcia,
+largo 3 m, viene declassato di un livello, a meno che si stia spostando
+verso il corridoio.
+
+
+inferenza/
+
+01_scena_completa.jpg
+    I tre livelli presenti insieme. In rosso la persona che occupa la
+    carreggiata davanti al veicolo, a 13,4 m; in giallo e in verde due
+    pedoni sul marciapiede a destra, a 18,1 m e 21,5 m, piu' vicini al
+    veicolo di quanto non lo sia il rosso ma fuori dalla sua traiettoria.
+    Ogni riquadro riporta l'identificativo assegnato dal tracciamento, la
+    distanza stimata e la confidenza. Il pannello in alto a sinistra
+    riassume lo stato del fotogramma; la cornice rossa segnala il livello
+    massimo.
+
+02_pedone_a_bordo_strada.jpg
+    Una pedone ferma fra le auto in sosta a 10,9 m: pur essendo entro la
+    soglia del rosso resta gialla, perche' si trova lateralmente rispetto
+    alla traiettoria. La freccia indica la direzione dello spostamento,
+    ricavata dal tracciamento.
+
+03_dettaglio_distanze.jpg
+    Dettaglio ingrandito della prima immagine, con le distanze stimate
+    leggibili: 13,4 m, 18,1 m, 21,5 m e 29,7 m.
+
+
+addestramento/
+
+Tre immagini del sottoinsieme KITTI usato per l'addestramento, con le
+annotazioni disegnate sopra. Sono le annotazioni originali del dataset
+dopo la conversione nel formato richiesto da YOLO: servono a verificare
+che la conversione delle coordinate sia corretta.

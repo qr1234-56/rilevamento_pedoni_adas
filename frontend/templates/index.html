@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Configurazione per la corretta visualizzazione su dispositivi diversi. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rilevamento pedoni</title>
+
+    <!-- Foglio di stile principale della dashboard. -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- ==============================================================
+         CONTENITORE PRINCIPALE DELLA DASHBOARD
+         ============================================================== -->
+
+    <main class="dashboard">
+
+        <!-- ==========================================================
+             HEADER
+             ========================================================== -->
+
+        <header class="dashboard-header">
+
+            <!-- Identificazione del contesto applicativo. -->
+            <div class="header-badge">
+                ADAS • COMPUTER VISION
+            </div>
+
+            <!-- Titolo principale dell'applicazione. -->
+            <h1>Rilevamento pedoni</h1>
+
+            <!-- Breve descrizione del sistema. -->
+            <p>
+                Sistema di rilevamento pedoni in ambiente urbano.
+            </p>
+
+        </header>
+
+
+        <!-- ==========================================================
+             SEZIONE WEBCAM
+             ========================================================== -->
+
+        <section class="panel webcam-panel">
+
+            <div class="section-heading">
+
+                <!-- Etichetta della funzione disponibile. -->
+                <span class="section-label">
+                    MONITORAGGIO IN TEMPO REALE
+                </span>
+
+                <div class="section-title-row">
+
+                    <!-- Titolo della sezione webcam. -->
+                    <h2>Telecamera</h2>
+
+                    <!-- Indicatore dello stato della webcam. -->
+                    <span id="webcam-status" class="status offline">
+                        OFFLINE
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Contenitore nascosto finché la webcam non viene attivata. -->
+            <div id="webcam-container" class="webcam-container hidden">
+
+                <!-- Stream MJPEG generato dal backend FastAPI. -->
+                <img
+                    id="webcam-stream"
+                    src=""
+                    alt="Webcam con rilevamento pedoni"
+                >
+
+                <!-- Indicazione del modello e della modalità operativa. -->
+                <div class="webcam-overlay">
+                    YOLOv8n • LIVE
+                </div>
+
+            </div>
+
+
+            <!-- Pulsante utilizzato per attivare e disattivare la webcam. -->
+            <button
+                id="webcam-button"
+                class="primary-button"
+                type="button"
+            >
+                Attiva webcam
+            </button>
+
+        </section>
+
+
+        <!-- ==========================================================
+             SEZIONE ANALISI VIDEO
+             ========================================================== -->
+
+        <section class="panel video-panel">
+
+            <div class="section-heading">
+
+                <!-- Etichetta che distingue l'analisi offline
+                     dal monitoraggio in tempo reale. -->
+                <span class="section-label">
+                    ANALISI DA FILE
+                </span>
+
+                <!-- Titolo della sezione. -->
+                <h2>Analisi video</h2>
+
+            </div>
+
+
+            <!-- Form utilizzato per selezionare e inviare un video. -->
+            <form id="video-form">
+
+                <!-- Area grafica per la selezione del file. -->
+                <label
+                    for="video-file"
+                    class="upload-area"
+                >
+
+                    <span class="upload-title">
+                        Seleziona un video
+                    </span>
+
+                    <span class="upload-description">
+                        Formati supportati: MP4, AVI, MOV
+                    </span>
+
+                </label>
+
+                <!-- Input file nascosto/stilizzato tramite CSS. -->
+                <input
+                    id="video-file"
+                    name="file"
+                    type="file"
+                    accept=".mp4,.avi,.mov"
+                >
+
+
+                <!-- Pulsante che avvia l'analisi del video. -->
+                <button
+                    id="analysis-button"
+                    class="primary-button"
+                    type="submit"
+                >
+                    Avvia analisi
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- ==========================================================
+             REPORT DELL'ANALISI
+             ========================================================== -->
+
+        <section class="panel result-panel">
+
+            <div class="section-heading">
+
+                <!-- Etichetta identificativa del report. -->
+                <span class="section-label">
+                    RIEPILOGO DELL'ANALISI
+                </span>
+
+                <!-- Titolo della sezione risultati. -->
+                <h2>Risultati</h2>
+
+            </div>
+
+
+            <!-- Nome del video elaborato. -->
+            <div class="analysis-file">
+
+                <span class="analysis-file-label">
+                    Video analizzato
+                </span>
+
+                <strong id="analyzed-file">
+                    —
+                </strong>
+
+            </div>
+
+
+            <!-- ======================================================
+                 STATISTICHE DEI LIVELLI DI ALLERTA
+                 ====================================================== -->
+
+            <div class="stats">
+
+                <!-- Numero di frame classificati GREEN. -->
+                <div class="stat-card green">
+                    <span class="stat-label">
+                        Fotogrammi verdi
+                    </span>
+
+                    <strong id="green-alert-frames">
+                        0
+                    </strong>
+                </div>
+
+
+                <!-- Numero di frame classificati YELLOW. -->
+                <div class="stat-card yellow">
+                    <span class="stat-label">
+                        Fotogrammi gialli
+                    </span>
+
+                    <strong id="yellow-alert-frames">
+                        0
+                    </strong>
+                </div>
+
+
+                <!-- Numero di frame classificati RED. -->
+                <div class="stat-card red">
+                    <span class="stat-label">
+                        Fotogrammi rossi
+                    </span>
+
+                    <strong id="red-alert-frames">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- Numero complessivo dei frame elaborati. -->
+            <div class="frames-summary">
+
+                <span>
+                    Fotogrammi elaborati
+                </span>
+
+                <strong id="frames-processed">
+                    0
+                </strong>
+
+            </div>
+
+
+            <!-- Pulsante per il download del video elaborato.
+                 Inizialmente nascosto e visualizzato da JavaScript
+                 solamente quando l'analisi è terminata. -->
+            <a
+                id="download-button"
+                class="primary-button download-button hidden"
+                href="#"
+                download
+            >
+                Scarica video elaborato
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- JavaScript responsabile dell'interazione con il backend
+         e dell'aggiornamento dinamico della dashboard. -->
+    <script src="/static/script.js"></script>
+
+</body>
+</html>
